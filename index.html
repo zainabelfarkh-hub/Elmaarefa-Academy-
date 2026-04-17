@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>أكاديمية المعرفة | منصة تعليمية</title>
+    <style>
+        :root { --main-blue: #004aad; --soft-gray: #f7f9fc; --text-main: #2d3436; }
+        body { font-family: 'Segoe UI', Roboto, sans-serif; background-color: var(--soft-gray); margin: 0; padding: 0; }
+        nav { background: white; padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 1000; }
+        .logo { font-size: 22px; font-weight: bold; color: var(--main-blue); }
+        .hero { text-align: center; padding: 50px 20px; background: white; margin-bottom: 30px; }
+        .container { max-width: 1200px; margin: auto; padding: 0 20px; }
+        .courses-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px; }
+        .course-card { background: white; border-radius: 16px; overflow: hidden; transition: 0.3s; border: 1px solid #edf2f7; }
+        .card-banner { height: 170px; position: relative; }
+        .card-banner iframe { width: 100%; height: 100%; border: none; }
+        .card-body { padding: 20px; }
+        .admin-toggle { position: fixed; bottom: 20px; left: 20px; background: var(--main-blue); color: white; padding: 15px; border-radius: 50%; cursor: pointer; border: none; z-index: 2000; }
+        .admin-box { position: fixed; bottom: 80px; left: 20px; background: white; padding: 20px; border-radius: 15px; width: 300px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); display: none; z-index: 2000; }
+        input, textarea, select { width: 100%; margin-bottom: 10px; padding: 8px; border-radius: 5px; border: 1px solid #ddd; }
+    </style>
+</head>
+<body>
+<nav><div class="logo">🎓 أكاديمية المعرفة</div></nav>
+<div class="hero"><h1>استكشف مستقبلك من هنا 🚀</h1><p>تعلم من أفضل الخبراء في مختلف المجالات</p></div>
+<div class="container"><div class="courses-grid" id="mainGrid"></div></div>
+<button class="admin-toggle" onclick="checkAuth()">⚙️</button>
+<div class="admin-box" id="adminBox">
+    <h3>إضافة كورس جديد</h3>
+    <input type="text" id="t" placeholder="عنوان الكورس">
+    <input type="text" id="v" placeholder="رابط الـ Embed للفيديو">
+    <textarea id="d" placeholder="وصف قصير"></textarea>
+    <select id="c">
+        <option value="#e17055">برتقالي</option>
+        <option value="#6c5ce7">بنفسجي</option>
+        <option value="#0984e3">أزرق</option>
+    </select>
+    <button onclick="addNew()" style="width:100%; background:var(--main-blue); color:white; border:none; padding:10px; border-radius:5px;">حفظ مؤقت</button>
+</div>
+<script>
+    let coursesData = [
+        { title: "أساسيات التصميم الجرافيكي", video: "https://www.youtube.com/embed/120NDS4WrAs", desc: "تعلم القواعد السبعة للتصميم الاحترافي ونظرية الألوان.", color: "#e17055", cat: "تصميم" },
+        { title: "كورس البرمجة للمبتدئين", video: "https://www.youtube.com/embed/S_8S_fM00-E", desc: "ابدأ رحلتك في عالم البرمجة من الصفر.", color: "#0984e3", cat: "برمجة" }
+    ];
+    const ADMIN_PASSWORD = "zox"; 
+    function draw() {
+        const grid = document.getElementById('mainGrid');
+        grid.innerHTML = coursesData.map(item => `
+            <div class="course-card">
+                <div class="card-banner" style="background-color: ${item.color}"><iframe src="${item.video}" allowfullscreen></iframe></div>
+                <div class="card-body"><h3>${item.title}</h3><p>${item.desc}</p></div>
+            </div>
+        `).reverse().join('');
+    }
+    function checkAuth() { if (prompt("الرجاء إدخال كلمة سر الإدارة:") === ADMIN_PASSWORD) toggleAdmin(); else alert("خطأ!"); }
+    function toggleAdmin() { const box = document.getElementById('adminBox'); box.style.display = box.style.display === 'block' ? 'none' : 'block'; }
+    function addNew() {
+        const title = document.getElementById('t').value, video = document.getElementById('v').value, desc = document.getElementById('d').value, color = document.getElementById('c').value;
+        if(title && video) { coursesData.push({ title, video, desc, color }); draw(); toggleAdmin(); }
+    }
+    draw();
+</script>
+</body>
+</html>
